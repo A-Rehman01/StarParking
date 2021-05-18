@@ -11,8 +11,15 @@ import {
 } from 'react-native';
 import colors from '../../config/colors';
 import {TextInput} from 'react-native-paper';
+import {register} from '../../../Store/actions/userActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSelector, useDispatch} from 'react-redux';
 
 const SignUp = ({navigation}) => {
+  const dispatch = useDispatch();
+  const userLogin = useSelector(state => state.userLogin);
+  const {loading, error, userInfo} = userLogin;
+
   const [Emial, setEmail] = useState('');
   const [Password, setPassword] = useState('');
   const [Name, setName] = useState('');
@@ -24,6 +31,30 @@ const SignUp = ({navigation}) => {
     }
     console.log({Name, Emial, Password});
   };
+  useEffect(() => {
+    const isUserLogin = async () => {
+      const userInfoFromLocalStorage = (await AsyncStorage.getItem('userInfo'))
+        ? JSON.parse(await AsyncStorage.getItem('userInfo'))
+        : null;
+
+      if (!userInfo?.isAdmin || !userInfoFromLocalStorage?.isAdmin) {
+        navigation.navigate('UserParkings');
+        // console.log('======Nah', {userInfo});
+      }
+      if (userInfo?.isAdmin || userInfoFromLocalStorage?.isAdmin) {
+        navigation.navigate('AdminParkings');
+        // console.log('======hee', {userInfo});
+      }
+    };
+    isUserLogin();
+  }, [userInfo, error]);
+
+  if (!userInfo?.isAdmin) {
+    navigation.navigate('UserParkings');
+  }
+  if (userInfo?.isAdmin) {
+    navigation.navigate('AdminParkings');
+  }
   return (
     <SafeAreaView
       style={{flex: 1, paddingHorizontal: 20, backgroundColor: colors.white}}>

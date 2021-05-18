@@ -9,8 +9,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import colors from '../../config/colors';
+import {useSelector} from 'react-redux';
 
 const Welcome = ({navigation}) => {
+  const userLogin = useSelector(state => state.userLogin);
+  const {loading, error, userInfo} = userLogin;
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <StatusBar translucent backgroundColor="rgba(0,0,0,0)" />
@@ -21,7 +25,15 @@ const Welcome = ({navigation}) => {
           <TouchableOpacity
             style={styles.welcomebtn}
             activeOpacity={0.8}
-            onPress={() => navigation.navigate('SignIn')}>
+            onPress={() => {
+              if (userInfo?.name) {
+                !userInfo?.isAdmin
+                  ? navigation.navigate('UserParkings')
+                  : navigation.navigate('AdminParkings');
+              } else {
+                navigation.navigate('SignIn');
+              }
+            }}>
             <View>
               <Text style={{fontSize: 22, fontWeight: 'bold'}}>
                 Get Started!

@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {
   SafeAreaView,
   StatusBar,
@@ -11,8 +12,14 @@ import {
 } from 'react-native';
 import colors from '../../config/colors';
 import {TextInput} from 'react-native-paper';
+import {login} from '../../../Store/actions/userActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignIn = ({navigation}) => {
+  const dispatch = useDispatch();
+  const userLogin = useSelector(state => state.userLogin);
+  const {loading, error, userInfo} = userLogin;
+
   const [Emial, setEmail] = useState('');
   const [Password, setPassword] = useState('');
 
@@ -21,8 +28,33 @@ const SignIn = ({navigation}) => {
       Alert.alert('Enter Correct Data');
       return;
     }
-    console.log({Emial, Password});
+    // console.log({Emial, Password});
+    dispatch(login(Emial, Password));
   };
+  useEffect(() => {
+    const isUserLogin = async () => {
+      const userInfoFromLocalStorage = (await AsyncStorage.getItem('userInfo'))
+        ? JSON.parse(await AsyncStorage.getItem('userInfo'))
+        : null;
+
+      if (!userInfo?.isAdmin || !userInfoFromLocalStorage?.isAdmin) {
+        navigation.navigate('UserParkings');
+        // console.log('======Nah', {userInfo});
+      }
+      if (userInfo?.isAdmin || userInfoFromLocalStorage?.isAdmin) {
+        navigation.navigate('AdminParkings');
+        // console.log('======hee', {userInfo});
+      }
+    };
+    isUserLogin();
+  }, [userInfo, error]);
+
+  if (!userInfo?.isAdmin) {
+    navigation.navigate('UserParkings');
+  }
+  if (userInfo?.isAdmin) {
+    navigation.navigate('AdminParkings');
+  }
   return (
     <SafeAreaView
       style={{flex: 1, paddingHorizontal: 20, backgroundColor: colors.white}}>
@@ -44,6 +76,7 @@ const SignIn = ({navigation}) => {
           style={styles.inputFieldStyle}
         />
         <View style={{marginTop: 10}}>
+          {error && <Text style={{color: 'red'}}>{error}</Text>}
           <Text>
             Not an Account ?{' '}
             <Text
