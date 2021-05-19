@@ -1,40 +1,71 @@
 import React, {useEffect} from 'react';
-import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
-import {logout} from '../../../Store/actions/userActions';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Header from '../../components/Header';
+import {userSideParkingsAtion} from '../../../Store//actions/parkingActions';
+import {DataTable} from 'react-native-paper';
 const UserParkings = ({navigation}) => {
   const dispatch = useDispatch();
-  const userLogin = useSelector(state => state.userLogin);
-  const {loading, error, userInfo} = userLogin;
 
-  const Logout = () => {
-    dispatch(logout());
-  };
+  const userSideParkings = useSelector(state => state.userSideParkings);
+  const {loading, error, parkings} = userSideParkings;
+
+  const itemsPerPage = 10;
+  const [page, setPage] = React.useState(0);
+  const from = page * itemsPerPage;
+  const to = (page + 1) * itemsPerPage;
+
   useEffect(() => {
-    const isUserLogin = async () => {
-      if (!userInfo || !(await AsyncStorage.getItem('userInfo'))) {
-        navigation.navigate('SignIn');
-      }
-      console.log(await AsyncStorage.getItem('userInfo'));
-    };
-    isUserLogin();
-  }, [userInfo, error]);
-  if (!userInfo) {
-    navigation.navigate('SignIn');
-  }
+    dispatch(userSideParkingsAtion());
+    console.log({parkings});
+  }, []);
   return (
     <SafeAreaView style={{flex: 1, marginHorizontal: 20}}>
-      <View>
-        <Text>Header</Text>
-      </View>
-      <Text>UserParkings</Text>
-      <TouchableOpacity style={{margin: 100}} onPress={() => Logout()}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
+      <Header navigation={navigation} />
+      {/* <Text>UserParkings</Text> */}
+      {loading && <Text style={{justifyContent: 'center'}}>Loading....</Text>}
+      {error && <Text style={{justifyContent: 'center'}}>{error}</Text>}
+      {parkings && !loading && (
+        <View style={styles.tableContainer}>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title>Names</DataTable.Title>
+              <DataTable.Title numeric>Availability</DataTable.Title>
+              <DataTable.Title numeric>Capacity</DataTable.Title>
+              <DataTable.Title numeric>Occupied</DataTable.Title>
+            </DataTable.Header>
+            {parkings.slice(from, to).map(obj => (
+              <DataTable.Row>
+                <DataTable.Cell>{obj.parkingname}</DataTable.Cell>
+                <DataTable.Cell numeric>{obj.availability}</DataTable.Cell>
+                <DataTable.Cell numeric>{obj.capacity}</DataTable.Cell>
+                <DataTable.Cell numeric>{obj.occupied}</DataTable.Cell>
+              </DataTable.Row>
+            ))}
+
+            <DataTable.Pagination
+              page={page}
+              numberOfPages={Math.floor(parkings?.length / itemsPerPage)}
+              onPageChange={page => setPage(page)}
+              label={`${from + 1}-${to} of ${parkings?.length}`}
+            />
+          </DataTable>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
 export default UserParkings;
+const styles = StyleSheet.create({
+  tableContainer: {
+    marginTop: 30,
+    // backgroundColor: 'pink',
+  },
+});

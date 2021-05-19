@@ -37,23 +37,17 @@ const SignIn = ({navigation}) => {
         ? JSON.parse(await AsyncStorage.getItem('userInfo'))
         : null;
 
-      if (!userInfo?.isAdmin || !userInfoFromLocalStorage?.isAdmin) {
-        navigation.navigate('UserParkings');
-        // console.log('======Nah', {userInfo});
-      }
-      if (userInfo?.isAdmin || userInfoFromLocalStorage?.isAdmin) {
-        navigation.navigate('AdminParkings');
-        // console.log('======hee', {userInfo});
+      if (userInfo?.name || userInfoFromLocalStorage?.name) {
+        navigation.navigate('DrawerNavigator');
+        console.log('======hee', {userInfo});
       }
     };
     isUserLogin();
   }, [userInfo, error]);
+  console.log('======hee', {userInfo});
 
-  if (!userInfo?.isAdmin) {
-    navigation.navigate('UserParkings');
-  }
   if (userInfo?.isAdmin) {
-    navigation.navigate('AdminParkings');
+    navigation.navigate('DrawerNavigator');
   }
   return (
     <SafeAreaView

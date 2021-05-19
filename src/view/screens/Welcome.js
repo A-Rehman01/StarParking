@@ -27,9 +27,7 @@ const Welcome = ({navigation}) => {
             activeOpacity={0.8}
             onPress={() => {
               if (userInfo?.name) {
-                !userInfo?.isAdmin
-                  ? navigation.navigate('UserParkings')
-                  : navigation.navigate('AdminParkings');
+                navigation.navigate('DrawerNavigator');
               } else {
                 navigation.navigate('SignIn');
               }

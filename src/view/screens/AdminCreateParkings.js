@@ -1,11 +1,18 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import Header from '../../components/Header';
 
-const AdminCreateParkings = () => {
+const AdminCreateParkings = ({navigation}) => {
+  const dispatch = useDispatch();
+  const userLogin = useSelector(state => state.userLogin);
+  const {loading, error, userInfo} = userLogin;
+
   return (
-    <View>
+    <SafeAreaView style={{flex: 1, marginHorizontal: 20}}>
+      <Header navigation={navigation} />
       <Text>AdminCreateParkings</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 

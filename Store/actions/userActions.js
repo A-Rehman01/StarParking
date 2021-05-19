@@ -11,6 +11,20 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {REACT_APP_HEROKU} from '../../config';
 
+//Logout
+export const CheckUserLogin = () => async dispatch => {
+  const userInfoFromLocalStorage = (await AsyncStorage.getItem('userInfo'))
+    ? JSON.parse(await AsyncStorage.getItem('userInfo'))
+    : null;
+  console.log({userInfoFromLocalStorage});
+  if (await userInfoFromLocalStorage) {
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: userInfoFromLocalStorage,
+    });
+  }
+};
+
 //Login
 export const login = (email, password) => async dispatch => {
   try {
@@ -50,10 +64,14 @@ export const login = (email, password) => async dispatch => {
 //Logout
 export const logout = () => async dispatch => {
   //   localStorage.removeItem('userInfo');
-  await AsyncStorage.removeItem('userInfo');
-  dispatch({
-    type: USER_LOGOUT,
-  });
+  try {
+    await AsyncStorage.removeItem('userInfo');
+    dispatch({
+      type: USER_LOGOUT,
+    });
+  } catch (error) {
+    return error;
+  }
 };
 
 //Register

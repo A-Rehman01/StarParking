@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -38,19 +38,31 @@ const StackNavigator = () => {
   const userLogin = useSelector(state => state.userLogin);
   const {loading, error, userInfo} = userLogin;
   // console.log('=====In Navigation', userInfo);
+  useEffect(() => {
+    const getUserInfoFromLocalStorage = async () => {
+      try {
+        const InfoInLocalStorageFromNavigator = (await AsyncStorage.getItem(
+          'userInfo',
+        ))
+          ? JSON.parse(await AsyncStorage.getItem('userInfo'))
+          : null;
+
+        console.log({InfoInLocalStorageFromNavigator});
+      } catch (error) {
+        // console.log('==========>', {error});
+        setUserInfoFromLocalStorage(null);
+        return null;
+      }
+    };
+    getUserInfoFromLocalStorage();
+  }, []);
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Welome" component={Welcome} />
 
-      {userInfo?.name && !userInfo?.isAdmin && (
-        <Stack.Screen name="UserParkings" component={DrawerNavigator} />
-      )}
-
-      {userInfo?.name && userInfo?.isAdmin && (
-        <Stack.Screen name="AdminParkings" component={AdminDrawerNavigator} />
-      )}
-
-      {!userInfo?.name && (
+      {userInfo?.name ? (
+        <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+      ) : (
         <>
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
@@ -63,23 +75,25 @@ const StackNavigator = () => {
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
+  const userLogin = useSelector(state => state.userLogin);
+  const {loading, error, userInfo} = userLogin;
   return (
-    <Drawer.Navigator initialRouteName="UserParkings">
-      <Drawer.Screen name="UserParkings" component={UserParkings} />
-      <Drawer.Screen name="UserBookParkings" component={UserBookParkings} />
-    </Drawer.Navigator>
-  );
-};
-
-const AdminDrawerNavigator = () => {
-  return (
-    <Drawer.Navigator initialRouteName="AdminParkings">
-      <Drawer.Screen name="AdminParkings" component={AdminParkings} />
-      <Drawer.Screen
-        name="AdminCreateParkings"
-        component={AdminCreateParkings}
-      />
-    </Drawer.Navigator>
+    <>
+      {userInfo?.name && userInfo?.isAdmin ? (
+        <Drawer.Navigator initialRouteName="AdminParkings">
+          <Drawer.Screen name="AdminParkings" component={AdminParkings} />
+          <Drawer.Screen
+            name="AdminCreateParkings"
+            component={AdminCreateParkings}
+          />
+        </Drawer.Navigator>
+      ) : (
+        <Drawer.Navigator initialRouteName="UserParkings">
+          <Drawer.Screen name="UserParkings" component={UserParkings} />
+          <Drawer.Screen name="UserBookParkings" component={UserBookParkings} />
+        </Drawer.Navigator>
+      )}
+    </>
   );
 };
 
