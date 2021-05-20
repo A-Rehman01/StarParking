@@ -16,7 +16,7 @@ export const CheckUserLogin = () => async dispatch => {
   const userInfoFromLocalStorage = (await AsyncStorage.getItem('userInfo'))
     ? JSON.parse(await AsyncStorage.getItem('userInfo'))
     : null;
-  console.log({userInfoFromLocalStorage});
+  // console.log({userInfoFromLocalStorage});
   if (await userInfoFromLocalStorage) {
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -24,7 +24,6 @@ export const CheckUserLogin = () => async dispatch => {
     });
   }
 };
-
 //Login
 export const login = (email, password) => async dispatch => {
   try {

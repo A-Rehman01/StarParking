@@ -4,12 +4,18 @@ import thunk from 'redux-thunk';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {userLoginReducers, userRegisterReducers} from './reducers/userReducer';
-import {userSideParkingsReducer} from './reducers/parkingReducer';
+import {
+  userSideParkingsReducer,
+  userCreateParkingsReducer,
+  userMyParkingsReducer,
+} from './reducers/parkingReducer';
 
 const reducer = combineReducers({
   userLogin: userLoginReducers,
   userRegister: userRegisterReducers,
   userSideParkings: userSideParkingsReducer,
+  userCreateParkings: userCreateParkingsReducer,
+  userMyParkings: userMyParkingsReducer,
 });
 
 // await AsyncStorage.getItem('@storage_Key');

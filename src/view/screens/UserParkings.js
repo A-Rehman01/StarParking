@@ -8,14 +8,16 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Header from '../../components/Header';
-import {userSideParkingsAtion} from '../../../Store//actions/parkingActions';
+import {userSideParkingsAtion} from '../../../Store/actions/parkingActions';
 import {DataTable} from 'react-native-paper';
+
 const UserParkings = ({navigation}) => {
   const dispatch = useDispatch();
 
   const userSideParkings = useSelector(state => state.userSideParkings);
   const {loading, error, parkings} = userSideParkings;
-
+  const userLogin = useSelector(state => state.userLogin);
+  const {userInfo} = userLogin;
   const itemsPerPage = 10;
   const [page, setPage] = React.useState(0);
   const from = page * itemsPerPage;
@@ -28,7 +30,9 @@ const UserParkings = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, marginHorizontal: 20}}>
       <Header navigation={navigation} />
-      {/* <Text>UserParkings</Text> */}
+      <Text style={{fontSize: 22, fontWeight: 'bold'}}>
+        {userInfo?.name} Parkings
+      </Text>
       {loading && <Text style={{justifyContent: 'center'}}>Loading....</Text>}
       {error && <Text style={{justifyContent: 'center'}}>{error}</Text>}
       {parkings && !loading && (

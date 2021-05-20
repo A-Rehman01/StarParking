@@ -11,6 +11,8 @@ import SignIn from '../view/screens/SignIn';
 import SignUp from '../view/screens/SignUp';
 import UserParkings from '../view/screens/UserParkings';
 import UserBookParkings from '../view/screens/UserBookParkings';
+import UserMyParkings from '../view/screens/UserMyParkings';
+import userMyParkingsDetails from '../view/screens/userMyParkingsDetails';
 import AdminParkings from '../view/screens/AdminParkings';
 import AdminCreateParkings from '../view/screens/AdminCreateParkings';
 
@@ -61,7 +63,13 @@ const StackNavigator = () => {
       <Stack.Screen name="Welome" component={Welcome} />
 
       {userInfo?.name ? (
-        <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+        <>
+          <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
+          <Stack.Screen
+            name="userMyParkingsDetails"
+            component={userMyParkingsDetails}
+          />
+        </>
       ) : (
         <>
           <Stack.Screen name="SignIn" component={SignIn} />
@@ -91,6 +99,7 @@ const DrawerNavigator = () => {
         <Drawer.Navigator initialRouteName="UserParkings">
           <Drawer.Screen name="UserParkings" component={UserParkings} />
           <Drawer.Screen name="UserBookParkings" component={UserBookParkings} />
+          <Drawer.Screen name="UserMyParkings" component={UserMyParkings} />
         </Drawer.Navigator>
       )}
     </>
