@@ -44,7 +44,7 @@ const SignIn = ({navigation}) => {
     };
     isUserLogin();
   }, [userInfo, error]);
-  console.log('======hee', {userInfo});
+  // console.log('======hee', {userInfo});
 
   if (userInfo?.isAdmin) {
     navigation.navigate('DrawerNavigator');
@@ -68,6 +68,7 @@ const SignIn = ({navigation}) => {
           value={Password}
           onChangeText={e => setPassword(e)}
           style={styles.inputFieldStyle}
+          secureTextEntry={true}
         />
         <View style={{marginTop: 10}}>
           {error && <Text style={{color: 'red'}}>{error}</Text>}

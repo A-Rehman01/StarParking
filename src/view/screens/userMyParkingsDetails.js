@@ -31,7 +31,7 @@ const userMyParkingsDetails = ({route, navigation}) => {
 
   const [status, setStatus] = useState(obj.status);
 
-  const [isExpired, setIsExpired] = useState(obj.isExpired ? 'true' : 'false');
+  const [isExpired, setIsExpired] = useState(obj.isExpired ? 'Yes' : 'No');
 
   return (
     <SafeAreaView style={{flex: 1, marginHorizontal: 20}}>
@@ -73,7 +73,7 @@ const userMyParkingsDetails = ({route, navigation}) => {
             style={styles.inputFieldStyle}
           />
           <TextInput
-            label="isExpired"
+            label="Expired"
             value={isExpired}
             style={styles.inputFieldStyle}
           />

@@ -27,7 +27,7 @@ const UserMyParkings = ({navigation}) => {
     parkings,
   } = userMyParkings;
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10; // must be even
   const from = page * itemsPerPage;
   const to = (page + 1) * itemsPerPage;
 
@@ -44,25 +44,27 @@ const UserMyParkings = ({navigation}) => {
       {erroruserMyParkings && (
         <Text style={{justifyContent: 'center'}}>{erroruserMyParkings}</Text>
       )}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <Text style={{fontSize: 22, fontWeight: 'bold'}}>
-          {userInfo?.name} Parkings
-        </Text>
-        <View>
-          <Icon
-            name="refresh"
-            color={colors.primary}
-            size={22}
-            onPress={() => dispatch(userMyParkingsAtion())}
-          />
+      {!erroruserMyParkings && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 22, fontWeight: 'bold'}}>
+            {userInfo?.name} Parkings
+          </Text>
+          <View>
+            <Icon
+              name="refresh"
+              color={colors.primary}
+              size={22}
+              onPress={() => dispatch(userMyParkingsAtion())}
+            />
+          </View>
         </View>
-      </View>
-      {parkings && !loading && (
+      )}
+      {parkings && !loading && !erroruserMyParkings && (
         <View style={styles.TableContainer}>
           <DataTable>
             <DataTable.Header>

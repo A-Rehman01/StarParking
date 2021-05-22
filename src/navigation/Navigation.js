@@ -15,6 +15,8 @@ import UserMyParkings from '../view/screens/UserMyParkings';
 import userMyParkingsDetails from '../view/screens/userMyParkingsDetails';
 import AdminParkings from '../view/screens/AdminParkings';
 import AdminCreateParkings from '../view/screens/AdminCreateParkings';
+import ParkingUserAdminSide from '../view/screens/ParkingUserAdminSide';
+import UserStatusDetailsAdminSide from '../view/screens/UserStatusDetailsAdminSide';
 
 //Fonts
 import {fontConfig} from '../config/font';
@@ -68,6 +70,14 @@ const StackNavigator = () => {
           <Stack.Screen
             name="userMyParkingsDetails"
             component={userMyParkingsDetails}
+          />
+          <Stack.Screen
+            name="ParkingUserAdminSide"
+            component={ParkingUserAdminSide}
+          />
+          <Stack.Screen
+            name="UserStatusDetailsAdminSide"
+            component={UserStatusDetailsAdminSide}
           />
         </>
       ) : (

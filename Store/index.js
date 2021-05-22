@@ -8,6 +8,9 @@ import {
   userSideParkingsReducer,
   userCreateParkingsReducer,
   userMyParkingsReducer,
+  adminSideParkingsReducer,
+  adminStatusAcceptReducer,
+  adminCreateParkingReducer,
 } from './reducers/parkingReducer';
 
 const reducer = combineReducers({
@@ -16,6 +19,9 @@ const reducer = combineReducers({
   userSideParkings: userSideParkingsReducer,
   userCreateParkings: userCreateParkingsReducer,
   userMyParkings: userMyParkingsReducer,
+  adminSideParkings: adminSideParkingsReducer,
+  adminStatusAccept: adminStatusAcceptReducer,
+  adminCreateParking: adminCreateParkingReducer,
 });
 
 // await AsyncStorage.getItem('@storage_Key');

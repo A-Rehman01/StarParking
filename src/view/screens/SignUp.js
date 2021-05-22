@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -29,7 +29,8 @@ const SignUp = ({navigation}) => {
       Alert.alert('Enter Correct Data');
       return;
     }
-    console.log({Name, Emial, Password});
+    // console.log({Name, Emial, Password});
+    dispatch(register(Name, Emial, Password));
   };
   useEffect(() => {
     const isUserLogin = async () => {
@@ -73,6 +74,7 @@ const SignUp = ({navigation}) => {
           value={Password}
           onChangeText={e => setPassword(e)}
           style={styles.inputFieldStyle}
+          secureTextEntry={true}
         />
         <View style={{marginTop: 10}}>
           <Text>

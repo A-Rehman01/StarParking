@@ -75,6 +75,7 @@ export const logout = () => async dispatch => {
 
 //Register
 export const register = (name, email, password) => async dispatch => {
+  console.log({email, password, name});
   try {
     dispatch({
       type: USER_REGISTER_REQUEST,
@@ -85,11 +86,11 @@ export const register = (name, email, password) => async dispatch => {
       },
     };
     const {data} = await axios.post(
-      `${REACT_APP}/api/users`,
+      `${REACT_APP_HEROKU}/api/users`,
       {name, email, password},
       config,
     );
-
+    console.log(data);
     dispatch({
       type: USER_REGISTER_SUCCESS,
       payload: data,
@@ -100,6 +101,7 @@ export const register = (name, email, password) => async dispatch => {
     });
     await AsyncStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
+    console.log(error);
     dispatch({
       type: USER_REGISTER_FAIL,
       payload:
